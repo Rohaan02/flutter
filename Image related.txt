@@ -1,0 +1,86 @@
+flutter create image_slider_grid_app
+cd image_slider_grid_app
+
+dependencies:
+  flutter:
+    sdk: flutter
+  carousel_slider: ^3.0.0
+
+
+import 'package:flutter/material.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: MyImageSliderGridApp(),
+    );
+  }
+}
+
+class MyImageSliderGridApp extends StatefulWidget {
+  @override
+  _MyImageSliderGridAppState createState() => _MyImageSliderGridAppState();
+}
+
+class _MyImageSliderGridAppState extends State<MyImageSliderGridApp> {
+  List<String> imageList = [
+    'assets/image1.jpg',
+    'assets/image2.jpg',
+    'assets/image3.jpg',
+    'assets/image4.jpg',
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Image Slider and Grid App'),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            CarouselSlider(
+              options: CarouselOptions(
+                height: 200.0,
+                enableInfiniteScroll: true,
+                autoPlay: true,
+              ),
+              items: imageList.map((imagePath) {
+                return Builder(
+                  builder: (BuildContext context) {
+                    return Container(
+                      width: MediaQuery.of(context).size.width,
+                      margin: EdgeInsets.symmetric(horizontal: 5.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                      ),
+                      child: Image.asset(
+                        imagePath,
+                        fit: BoxFit.cover,
+                      ),
+                    );
+                  },
+                );
+              }).toList(),
+            ),
+            GridView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+              ),
+              itemCount: imageList.length,
+              itemBuilder: (context, index) {
+                return Image.asset(imageList[index]);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
